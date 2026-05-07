@@ -29,16 +29,17 @@ A Simple web app to search for any github user and display their profile informa
 
 -----------------------------
 
-## How to run
+## How to run ✨
+-----------------------------------
 
-## ScreenShots
+## ScreenShots 📸
 
 Here's what the app look like
 - [Click here for screenshot](ss.png)
 
 ----------------------------
 
-## LIVE DEMO
+## LIVE DEMO 🌐
 
 - [Click here for app live demo]( https://amnaakhtar1213.github.io/github-user-finder/)
 
