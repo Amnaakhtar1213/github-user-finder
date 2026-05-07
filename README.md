@@ -40,7 +40,7 @@ Here's what the app look like
 
 ## LIVE DEMO
 
-- [Click here for app live demo]()
+- [Click here for app live demo]( https://amnaakhtar1213.github.io/github-user-finder/)
 
 --------------------------
 
