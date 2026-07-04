@@ -20,60 +20,60 @@ const blogContainer = document.getElementById("blog-container");
 const twitterContainer = document.getElementById("twitter-container");
 const reposContainer = document.getElementById("repos-container");
 
+searchBtn.addEventListener("click", searchUser);
+searchInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") searchUser();
+});
 
-
- searchBtn.addEventListener("click",searchUser);
- searchInput.addEventListener("keypress", (e) => {
-  if(e.key === "Enter") searchUser()
- })
-
- async function searchUser(){
+async function searchUser() {
   const username = searchInput.value.trim();
-  
-  if(!username) return alert("Please enter a username");
 
-  try{
+  if (!username) return alert("Please enter a username");
+
+  try {
+    // reset the ui
     profileContainer.classList.add("hidden");
     errorContainer.classList.add("hidden");
 
-
+    // https://api.github.com/users/burakorkmez
     const response = await fetch(`https://api.github.com/users/${username}`);
-    if(!response.ok) throw new Error("User not found");
+    if (!response.ok) throw new Error("User not found");
 
     const userData = await response.json();
-    console.log("User data is here", userData);
+    console.log("user data is here", userData);
 
     displayUserData(userData);
 
     fetchRepositories(userData.repos_url);
-  } catch (error){
+  } catch (error) {
     showError();
   }
 }
 
-async function fetchRepositories(reposUrl){
-  reposContainer.innerHTML = `<div class="loading-repos">Loading Repositories...</div>`;
+async function fetchRepositories(reposUrl) {
+  reposContainer.innerHTML = '<div class="loading-repos">Loading repositories...</div>';
 
-  try{
-   const response = await fetch(reposUrl)
+  try {
+    const response = await fetch(reposUrl + "?per_page=6");
     const repos = await response.json();
     displayRepos(repos);
-
-  } catch (error){
-  reposContainer.innerHTML = `<div class="no-repos">${error.message}</div>`;
+  } catch (error) {
+    reposContainer.innerHTML = `<div class="no-repos">${error.message}</div>`;
   }
 }
 
-function displayRepos(repos){
-  if(repos.length === 0){
-    reposContainer.innerHTML =  `<div class="no-repos">No repositories found</div>`;
+function displayRepos(repos) {
+  if (repos.length === 0) {
+    reposContainer.innerHTML = '<div class="no-repos">No repositories found</div>';
     return;
   }
+
   reposContainer.innerHTML = "";
 
-  repos.forEach(repo => {
-    const repoCard = document.createElement("div")
-    repoCard.classList = "repo-card";
+  repos.forEach((repo) => {
+    const repoCard = document.createElement("div");
+    repoCard.className = "repo-card";
+
     const updatedAt = formatDate(repo.updated_at);
 
     repoCard.innerHTML = `
@@ -104,66 +104,62 @@ function displayRepos(repos){
     `;
 
     reposContainer.appendChild(repoCard);
-  })
-
+  });
 }
 
-
-
-function displayUserData(user){
+function displayUserData(user) {
   avatar.src = user.avatar_url;
   nameElement.textContent = user.name || user.login;
-  usernameElement.textContent = `@${user.login}`
+  usernameElement.textContent = `@${user.login}`;
   bioElement.textContent = user.bio || "No bio available";
 
-  locationElement.textContent = user.location || "Not Specified";
+  locationElement.textContent = user.location || "Not specified";
   joinedDateElement.textContent = formatDate(user.created_at);
 
   profileLink.href = user.html_url;
   followers.textContent = user.followers;
   following.textContent = user.following;
-  repos.textContent = user.public_repos; 
+  repos.textContent = user.public_repos;
 
-  companyElement.textContent = user.company || "Not specified";
-  companyContainer.style.display = "flex";
+  if (user.company) companyElement.textContent = user.company;
+  else companyElement.textContent = "Not specified";
 
-  if(user.blog){
+  if (user.blog) {
     blogElement.textContent = user.blog;
     blogElement.href = user.blog.startsWith("http") ? user.blog : `https://${user.blog}`;
-   } else {
+  } else {
     blogElement.textContent = "No website";
     blogElement.href = "#";
-   }
-    blogContainer.style.display = "flex";
+  }
 
-    if(user.twitter_username){
-      twitterElement.textContent = `@${user.twitter_username}`;
-      twitterElement.href = `https://twitter.com/${user.twitter_username}`;
-    } else {
-      twitterElement.textContent = "No Twitter";
-      twitterElement.href = "#";
-    }
+  blogContainer.style.display = "flex";
 
-    twitterContainer.style.display = "flex";
+  if (user.twitter_username) {
+    twitterElement.textContent = `@${user.twitter_username}`;
+    twitterElement.href = `https://twitter.com/${user.twitter_username}`;
+  } else {
+    twitterElement.textContent = "No Twitter";
+    twitterElement.href = "#";
+  }
 
-    profileContainer.classList.remove("hidden");
-   }
+  twitterContainer.style.display = "flex";
 
-
-function formatDate(dateString){
-  return new Date(dateString).toLocaleDateString("en-US", {
-   year: "numeric",
-   month: "short",
-   day: "numeric" ,
-  })
+  // show the profile
+  profileContainer.classList.remove("hidden");
 }
 
-function showError(){
+function showError() {
   errorContainer.classList.remove("hidden");
   profileContainer.classList.add("hidden");
 }
 
+function formatDate(dateString) {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 searchInput.value = "Amnaakhtar1213";
 searchUser();
-
-
