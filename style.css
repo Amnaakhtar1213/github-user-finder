@@ -31,6 +31,8 @@ body {
 .container {
   width: 100%;
   max-width: 800px;
+   margin: 0 auto;            /* center horizontally */
+  text-align: center; 
 }
 
 header {
@@ -307,30 +309,73 @@ button:hover {
   border-radius: var(--border-radius);
 }
 
-/* Responsive design for mobile devices */
+@media (max-width: 900px) {
+  h1 {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+  header p {
+    font-size: 0.95rem;
+    text-align: center;
+  }
+  #name {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+  .repos-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    justify-items: center; /* center repo cards */
+  }
+}
+
+/* Mobile screens (<= 600px) */
 @media (max-width: 600px) {
+   .container {
+    width: 95%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
   .profile-header {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
-  .location-date {
-    justify-content: center;
-    flex-direction: column;
-    gap: 5px;
-  }
-
   .stats,
-  .additional-info {
-    flex-direction: column;
-    grid-template-columns: 1fr;
+  .additional-info,
+  .repos-container {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
-  .info-item {
-    justify-content: center;
-  }
   .repos-container {
-    grid-template-columns: 1fr; /* single column repos on mobile */
+    grid-template-columns: 1fr;
+    justify-items: center; /* center repo cards */
+  }
+
+}
+
+/* Extra small phones (<= 400px) */
+@media (max-width: 400px) {
+ .container {
+    width: 100%;
+    text-align: center;
+  }
+
+  h1, header p, #name, #username, .bio, .info-item, .repo-description {
+    text-align: center;
+  }
+
+  .stats, .additional-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .repos-container {
+    grid-template-columns: 1fr;
+    justify-items: center;
   }
 }
